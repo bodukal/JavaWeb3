@@ -1,34 +1,27 @@
 pipeline {
     agent any
+
     environment {
-        DOCKER_IMAGE = 'javacal'
-        DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials'  // Replace with your Docker credentials ID in Jenkins
+        // Set any required environment variables
     }
+
     stages {
-        stage('Clone Repository') {
+        stage('Checkout SCM') {
             steps {
-                git 'https://github.com/your-username/java-web-calculator.git'  // Replace with your repo URL
+                git url: 'https://github.com/bodukal/JavaWeb3.git', credentialsId: 'github-credentials-id'
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image
-                    docker.build(DOCKER_IMAGE)
+                    // Docker build steps here
                 }
             }
         }
-
         stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
-                    // Push Docker image to Docker Hub
-                    withCredentials([usernamePassword(credentialsId: DOCKER_HUB_CREDENTIALS, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                        docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_USERNAME}:${DOCKER_PASSWORD}") {
-                            docker.image(DOCKER_IMAGE).push()
-                        }
-                    }
+                    // Docker push steps here
                 }
             }
         }
